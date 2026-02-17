@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  job-ecosystem-main:
+    build:
+      context: ./JobEcosystemMain
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - ai-resume-builder
+      - job-notification-tracker
+      - placement-readiness-platform
+    networks:
+      - job-ecosystem-network
+
+  ai-resume-builder:
+    build:
+      context: ./AIResumeBuilder
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - job-ecosystem-network
+
+  job-notification-tracker:
+    build:
+      context: ./JobNotificationTracker
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - job-ecosystem-network
+
+  placement-readiness-platform:
+    build:
+      context: ./PlacementReadinessPlatform
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - job-ecosystem-network
+
+networks:
+  job-ecosystem-network:
+    driver: bridge
